@@ -9,3 +9,12 @@ class ConsoGES :
 
     #description est la chaîne de caractères décrivant l'objet
     description = ""
+
+    def __init__(self, coutGES, utilite, description) -> None :
+        self.coutGES = coutGES
+        self.utilite = utilite
+        self.description = description
+
+
+    def __str__(self) -> str:
+        return self.description + " a une utilité de : " + str(self.utilite) + " et un coût GES de : " + str(self.coutGES)
