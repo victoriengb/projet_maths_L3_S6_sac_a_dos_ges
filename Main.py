@@ -29,4 +29,9 @@ class Main :
         #Exemple de SacADosGES possible
         sacADosGES = SacADosGES(consommation=consommation[0], alimentation=alimentation[1], transport=transport[2], logement=logement[1])
 
+        #-------------------------------------------------------------Test du code 
+        #print(sacADosGES)
+        #print(sacADosGES.getCoutGES())
+        #print(sacADosGES.estValide(5.5))
+
 Main.main()
