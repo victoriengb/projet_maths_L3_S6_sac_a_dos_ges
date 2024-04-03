@@ -16,6 +16,14 @@ class ConsoGES :
         self.utilite = utilite
         self.description = description
 
+    #Renvoie le coût GES de l'objet ConsoGES
+    def getCoutGES(self) -> float :
+        return self.coutGES
+    
+    #Renvoie l'utilité de l'objet ConsoGES
+    def getUtilite(self) -> int :
+        return self.utilite
+
     #Renvoie une description textuelle de l'objet
     def __str__(self) -> str:
         return self.description + " a une utilité de : " + str(self.utilite) + " et un coût GES de : " + str(self.coutGES)
