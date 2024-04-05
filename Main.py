@@ -43,6 +43,9 @@ def main () -> None :
 def getSacsADos(alimentation, transport, logement, consommation):
     listeSacsADos = [SacADosGES(ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, ""))]
 
+    #Chaque usage de append est positionné dans la boucle la plus interne concernant les éléments consoGES ajoutés dans le sac à dos
+    #e.g : lorsqu'on append un élément de consommation, on le met dans la boucle for concernant les éléments c de consommation
+    #cela permet d'éviter les doublons
     for a in alimentation :
         listeSacsADos.append(SacADosGES(ConsoGES(0.0, 0, ""), a, ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, "")))
 
