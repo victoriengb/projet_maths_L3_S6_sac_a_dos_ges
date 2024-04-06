@@ -2,7 +2,7 @@ from ConsoGES import ConsoGES
 from SacADosGES import SacADosGES
 from SystemeRelationnel import SystemeRelationnel
 
-#class Main :
+import matplotlib.pyplot as plt
 
 """Main est la classe qui exécute le programme"""
 
@@ -29,6 +29,8 @@ def main () -> None :
                     ConsoGES(1.3, 6, "Consommation sobre de bien et services")]
     
     listeSacsADos = getSacsADos(alimentation, transport,  logement,  consommation)
+
+    afficherFrontDePareto(listeSacsADos)
 
     #TEST getSR_PD
     #print(getSR_PD(listeSacsADos).R_relationBinaire[0][0].__str__() + "\n" + getSR_PD(listeSacsADos).R_relationBinaire[0][1].__str__())
@@ -75,11 +77,14 @@ def getSacsADos(alimentation, transport, logement, consommation):
 #Générer partiellement via Google Bard car le même raisonnement avec une boucle for ne fonctionnait pas à cause d'un problème d'indexation
 #La méthode filtre copie la liste de sacs à dos pour ne pas la modifier puis la parcourt grâce à une boucle while tout en supprimant les sacs à dos non valide
 def filtre(B_borne, listeSacsADos) :
+    #définir une nouvelle liste permet de ne pas modifier celle passée en paramètre
     nouvelle_liste = listeSacsADos.copy()
     
     i = 0
+    #Tant qu'on n'a pas entièrement parcouru la liste on retire les sacs non valides
     while i < len(nouvelle_liste):
         e = nouvelle_liste[i]
+        #On ne modifie pas la valeur de i dans le if sinon on obtient un problème d'indexation
         if not e.estValide(B_borne):
             nouvelle_liste.pop(i)
         #Le else est crucial sinon on a un problème d'indexation
@@ -91,12 +96,45 @@ def filtre(B_borne, listeSacsADos) :
 #Dans ce programme, la liste de sacs à dos est générée grâce à la méthode getSacsADos créée auparavant
 def getSR_PD(listeSacsADos) -> SystemeRelationnel :
 
-    systemeRelationnel = SystemeRelationnel(listeSacsADos, [])
+    #Déclaration du système relationnel
+    systemeRelationnelPD = SystemeRelationnel(listeSacsADos, [])
 
-    for e1 in systemeRelationnel.A_ensembleDesElementsDuSysteme :
-        for e2 in systemeRelationnel.A_ensembleDesElementsDuSysteme :
+    #les deux boucles for imbriquées permettent de considérer tous les couples de sacs à dos possibles
+    for e1 in systemeRelationnelPD.A_ensembleDesElementsDuSysteme :
+        for e2 in systemeRelationnelPD.A_ensembleDesElementsDuSysteme :
+            #Le test conditionnel correspond à la définition de la Pareto-dominance
             if (e1.getCoutGES() < e2.getCoutGES() and e1.getUtilite() >= e2.getUtilite()) or (e1.getCoutGES() <= e2.getCoutGES() and e1.getUtilite() > e2.getUtilite()) :
-                systemeRelationnel.R_relationBinaire.append((e1, e2))
-    return systemeRelationnel 
+                systemeRelationnelPD.R_relationBinaire.append((e1, e2))
+    return systemeRelationnelPD 
 
+#Usage de Matplotlib généré par Google Bard
+#Affiche les sacs à dos non Pareto-dominés avec le coût GES en abscisse et l'utilité en ordonnée
+def afficherFrontDePareto(listeSacsADos) -> (None) :
+    #Obtention du système relationnel de Pareto-dominance
+    systemeRelationnelPD = getSR_PD(listeSacsADos)
+
+    #Déclaration de la liste contenant les sacs non Pareto dominés
+    sacsNonDomines = []
+    #On parcourt l'ensemble des sacs appartenant au Système relationnel
+    for e in systemeRelationnelPD.A_ensembleDesElementsDuSysteme :
+        #On considère que chaque sac du Système est par défaut non Pareto-dominés
+        sacsNonDomines.append(e)
+        #On parcourt les couples appartenant à la relation binaire de Pareto-dominance
+        for couplePD in systemeRelationnelPD.R_relationBinaire :
+            #Si un sac est Pareto-dominé, on le retire des sacs non Pareto-dominés
+            if e == couplePD[1] and e in sacsNonDomines :
+                sacsNonDomines.remove(e)
+    #On initialise la liste contenant les valeurs de coûts GES des sacs non Pareto-dominés
+    listeCoutsGES = [sac.getCoutGES() for sac in sacsNonDomines]
+    #On initialise la liste contenant les valeurs d'utilité des sacs non Pareto-dominés
+    listeUtilites = [sac.getUtilite() for sac in sacsNonDomines]
+
+    #On crée le graphe et on l'affiche
+    plt.scatter(listeCoutsGES, listeUtilites)
+    plt.xlabel("Coût GES")
+    plt.ylabel("Utilité")
+    plt.title("Front de Pareto")
+    plt.show()
+
+    
 main()
