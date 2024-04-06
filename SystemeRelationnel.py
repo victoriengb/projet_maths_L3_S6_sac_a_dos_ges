@@ -9,7 +9,7 @@ class SystemeRelationnel :
         self.R_relationBinaire = R_relationBinaire
     
     def estReflexive(self) -> bool :
-        estReflexive = true
+        estReflexive = True
 
         for e in self.A_ensembleDesElementsDuSysteme :
             if not ((e, e) in self.R_relationBinaire) :
@@ -62,4 +62,7 @@ class SystemeRelationnel :
         return estAsymetrique
 
     def __str__(self) -> str:
-        return "Le système relationnel est composé des éléments : " + str(self.A_ensembleDesElementsDuSysteme) + " et de la relation binaire : " + str(self.R_relationBinaire)
+        return "Le système relationnel est composé de la relation binaire : " + str(self.R_relationBinaire)
+    
+        #Ancienne description textuelle : trop détaillée
+        #return "Le système relationnel est composé des éléments : " + str(self.A_ensembleDesElementsDuSysteme) + " et de la relation binaire : " + str(self.R_relationBinaire)

@@ -33,5 +33,8 @@ class SacADosGES :
     
     #Renvoie une description textuelle de l'objet
     def __str__(self) -> str:
-        return "Le sac à dos est composé de : " + "\n" + self.consommation.__str__() + "\n" + self.alimentation.__str__() + "\n" + self.transport.__str__() + "\n" + self.logement.__str__()
+
+        return "Le sac à dos à une utilité de : " + str(self.getUtilite()) + " et un coût GES total de : " + str(self.getCoutGES())
+        #Ancienne description textuelle : pas assez informative
+        #return "Le sac à dos est composé de : " + "\n" + self.consommation.__str__() + "\n" + self.alimentation.__str__() + "\n" + self.transport.__str__() + "\n" + self.logement.__str__()
     
