@@ -1,7 +1,6 @@
 from ConsoGES import ConsoGES
 from SacADosGES import SacADosGES
-
-from itertools import combinations, chain
+from SystemeRelationnel import SystemeRelationnel
 
 #class Main :
 
@@ -30,13 +29,12 @@ def main () -> None :
                     ConsoGES(1.3, 6, "Consommation sobre de bien et services")]
     
     listeSacsADos = getSacsADos(alimentation, transport,  logement,  consommation)
-    print(len(listeSacsADos))
 
-    nouvelle_listeSacsADos = filtre(0.0, listeSacsADos)
-
-    print(len(nouvelle_listeSacsADos))
-
-
+    #TEST getSR_PD
+    #print(getSR_PD(listeSacsADos).R_relationBinaire[0][0].__str__() + "\n" + getSR_PD(listeSacsADos).R_relationBinaire[0][1].__str__())
+    
+    #TEST filtre
+    #nouvelle_listeSacsADos = filtre(0.0, listeSacsADos)
 
 #getSacADos prend une liste de consoGES concernant l'alimentation, le transport, le logement et la consommation de biens et services
 #getSacADos renvoie une liste contenant l'ensemble des sacs à dos pouvant être conçus à partir des listes données en paramètres
@@ -88,5 +86,17 @@ def filtre(B_borne, listeSacsADos) :
         else:
             i += 1
     return nouvelle_liste
+
+#getSR_PD prend en entrée une liste de sacs à dos et renvoie un Système relationnel représentant la relation de Pareto dominance existant entre les divers sacs à dos
+#Dans ce programme, la liste de sacs à dos est générée grâce à la méthode getSacsADos créée auparavant
+def getSR_PD(listeSacsADos) -> SystemeRelationnel :
+
+    systemeRelationnel = SystemeRelationnel(listeSacsADos, [])
+
+    for e1 in systemeRelationnel.A_ensembleDesElementsDuSysteme :
+        for e2 in systemeRelationnel.A_ensembleDesElementsDuSysteme :
+            if (e1.getCoutGES() < e2.getCoutGES() and e1.getUtilite() >= e2.getUtilite()) or (e1.getCoutGES() <= e2.getCoutGES() and e1.getUtilite() > e2.getUtilite()) :
+                systemeRelationnel.R_relationBinaire.append((e1, e2))
+    return systemeRelationnel 
 
 main()
