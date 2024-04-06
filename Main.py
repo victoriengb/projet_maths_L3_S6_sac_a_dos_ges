@@ -30,14 +30,22 @@ def main () -> None :
     
     listeSacsADos = getSacsADos(alimentation, transport,  logement,  consommation)
 
+    #Question 9 affichage front de Pareto
     afficherFrontDePareto(listeSacsADos)
 
     #TEST getSR_PD
     #print(getSR_PD(listeSacsADos).R_relationBinaire[0][0].__str__() + "\n" + getSR_PD(listeSacsADos).R_relationBinaire[0][1].__str__())
     
+    #TEST getSR_LexC
+    #print(getSR_LexC(listeSacsADos).R_relationBinaire[0][0].__str__() + "\n" + getSR_LexC(listeSacsADos).R_relationBinaire[0][1].__str__())
+
+    #TEST getSR_LexU
+    #print(getSR_LexU(listeSacsADos).R_relationBinaire[0][0].__str__() + "\n" + getSR_LexU(listeSacsADos).R_relationBinaire[0][1].__str__())
+
     #TEST filtre
     #nouvelle_listeSacsADos = filtre(0.0, listeSacsADos)
 
+#Question 5
 #getSacADos prend une liste de consoGES concernant l'alimentation, le transport, le logement et la consommation de biens et services
 #getSacADos renvoie une liste contenant l'ensemble des sacs à dos pouvant être conçus à partir des listes données en paramètres
 def getSacsADos(alimentation, transport, logement, consommation):
@@ -74,6 +82,7 @@ def getSacsADos(alimentation, transport, logement, consommation):
     
     return list(listeSacsADos)
 
+#Question 5
 #Générer partiellement via Google Bard car le même raisonnement avec une boucle for ne fonctionnait pas à cause d'un problème d'indexation
 #La méthode filtre copie la liste de sacs à dos pour ne pas la modifier puis la parcourt grâce à une boucle while tout en supprimant les sacs à dos non valide
 def filtre(B_borne, listeSacsADos) :
@@ -92,6 +101,7 @@ def filtre(B_borne, listeSacsADos) :
             i += 1
     return nouvelle_liste
 
+#Question 8
 #getSR_PD prend en entrée une liste de sacs à dos et renvoie un Système relationnel représentant la relation de Pareto dominance existant entre les divers sacs à dos
 #Dans ce programme, la liste de sacs à dos est générée grâce à la méthode getSacsADos créée auparavant
 def getSR_PD(listeSacsADos) -> SystemeRelationnel :
@@ -105,8 +115,9 @@ def getSR_PD(listeSacsADos) -> SystemeRelationnel :
             #Le test conditionnel correspond à la définition de la Pareto-dominance
             if (e1.getCoutGES() < e2.getCoutGES() and e1.getUtilite() >= e2.getUtilite()) or (e1.getCoutGES() <= e2.getCoutGES() and e1.getUtilite() > e2.getUtilite()) :
                 systemeRelationnelPD.R_relationBinaire.append((e1, e2))
-    return systemeRelationnelPD 
+    return systemeRelationnelPD
 
+#Question 9
 #Usage de Matplotlib généré par Google Bard
 #Affiche les sacs à dos non Pareto-dominés avec le coût GES en abscisse et l'utilité en ordonnée
 def afficherFrontDePareto(listeSacsADos) -> (None) :
@@ -136,5 +147,36 @@ def afficherFrontDePareto(listeSacsADos) -> (None) :
     plt.title("Front de Pareto")
     plt.show()
 
+#Question 10
+#getSR_LexU prend en entrée une liste de sacs à dos et renvoie un Système relationnel représentant la relation lexicographiqueU existant entre les divers sacs à dos
+#Dans ce programme, la liste de sacs à dos est générée grâce à la méthode getSacsADos créée auparavant
+def getSR_LexU(listeSacsADos) -> SystemeRelationnel :
+
+    #Déclaration du système relationnel
+    systemeRelationnelLexU = SystemeRelationnel(listeSacsADos, [])
+
+    #les deux boucles for imbriquées permettent de considérer tous les couples de sacs à dos possibles
+    for e1 in systemeRelationnelLexU.A_ensembleDesElementsDuSysteme :
+        for e2 in systemeRelationnelLexU.A_ensembleDesElementsDuSysteme :
+            #Le test conditionnel correspond à la définition de la relation lexicographiqueU
+            if (e1.getUtilite() > e2.getUtilite()) or (e1.getUtilite() == e2.getUtilite() and e1.getCoutGES() < e2.getCoutGES()) :
+                systemeRelationnelLexU.R_relationBinaire.append((e1, e2))
+    return systemeRelationnelLexU
+
+#Question 10
+#getSR_LexU prend en entrée une liste de sacs à dos et renvoie un Système relationnel représentant la relation lexicographiqueC existant entre les divers sacs à dos
+#Dans ce programme, la liste de sacs à dos est générée grâce à la méthode getSacsADos créée auparavant
+def getSR_LexC(listeSacsADos) -> SystemeRelationnel :
+
+    #Déclaration du système relationnel
+    systemeRelationnelLexC = SystemeRelationnel(listeSacsADos, [])
+
+    #les deux boucles for imbriquées permettent de considérer tous les couples de sacs à dos possibles
+    for e1 in systemeRelationnelLexC.A_ensembleDesElementsDuSysteme :
+        for e2 in systemeRelationnelLexC.A_ensembleDesElementsDuSysteme :
+            #Le test conditionnel correspond à la définition de la relation lexicographiqueU
+            if (e1.getCoutGES() < e2.getCoutGES()) or (e1.getCoutGES() == e2.getCoutGES() and e1.getUtilite() > e2.getUtilite()) :
+                systemeRelationnelLexC.R_relationBinaire.append((e1, e2))
+    return systemeRelationnelLexC
     
 main()
