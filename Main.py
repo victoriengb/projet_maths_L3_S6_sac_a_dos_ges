@@ -42,6 +42,9 @@ def main () -> None :
     #TEST getSR_LexU
     #print(getSR_LexU(listeSacsADos).R_relationBinaire[0][0].__str__() + "\n" + getSR_LexU(listeSacsADos).R_relationBinaire[0][1].__str__())
 
+    #TEST getSR_Borne
+    #print(getSR_Borne(5.0, listeSacsADos).R_relationBinaire[0][0].__str__() + "\n" + getSR_Borne(5.0, listeSacsADos).R_relationBinaire[0][1].__str__())
+
     #TEST filtre
     #nouvelle_listeSacsADos = filtre(0.0, listeSacsADos)
 
@@ -178,5 +181,19 @@ def getSR_LexC(listeSacsADos) -> SystemeRelationnel :
             if (e1.getCoutGES() < e2.getCoutGES()) or (e1.getCoutGES() == e2.getCoutGES() and e1.getUtilite() > e2.getUtilite()) :
                 systemeRelationnelLexC.R_relationBinaire.append((e1, e2))
     return systemeRelationnelLexC
-    
+
+#Question 11
+#getSR_Borne prend en entrée une borne B_borne (flotant) et une liste de sacs à dos et renvoie un Système relationnel représentant la relation bornée de borne B_borne existant entre les divers sacs à dos
+#Dans ce programme, la liste de sacs à dos est générée grâce à la méthode getSacsADos créée auparavant
+def getSR_Borne(B_borne, listeSacsADos) -> SystemeRelationnel :
+    #Déclaration du système relationnel
+    systemeRelationnelBorne_B = SystemeRelationnel(listeSacsADos, [])
+
+    #les deux boucles for imbriquées permettent de considérer tous les couples de sacs à dos possibles
+    for e1 in systemeRelationnelBorne_B.A_ensembleDesElementsDuSysteme :
+        for e2 in systemeRelationnelBorne_B.A_ensembleDesElementsDuSysteme :
+            #Le test conditionnel correspond à la définition de la relation bornée de borne B
+            if (e1.getCoutGES() <= B_borne and e2.getCoutGES() > B_borne) or (e1.getCoutGES() <= B_borne and e2.getCoutGES() <= B_borne and e1.getUtilite() > e2.getUtilite()) :
+                systemeRelationnelBorne_B.R_relationBinaire.append((e1, e2))
+    return systemeRelationnelBorne_B
 main()
