@@ -99,6 +99,15 @@ class SystemeRelationnel :
                 return estAsymetrique
         return estAsymetrique
 
+    def estTotale(self) -> bool :
+        estTotale = True
+        for e1 in self.A_ensembleDesElementsDuSysteme :
+            for e2 in self.A_ensembleDesElementsDuSysteme :
+                if (e1 != e2 and ((e1, e2) not in self.R_relationBinaire) and ((e2, e1) not in self.R_relationBinaire)) :
+                    estTotale = False
+                    return estTotale
+        return estTotale
+    
     def __str__(self) -> str:
         return "Le système relationnel est composé de la relation binaire : " + str(self.R_relationBinaire)
     

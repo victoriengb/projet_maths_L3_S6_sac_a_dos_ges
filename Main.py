@@ -52,6 +52,8 @@ def main () -> None :
     #systemeRelationnelPD = getSR_PD(listeSacsADos)
     #getProprietesSR(systemeRelationnelPD)
     
+    #getProprietesSR(getSR_Borne(5.0, listeSacsADos))
+    print(getSR_Borne(5.0, listeSacsADos).estTotale())
 
 #Question 5
 #getSacADos prend une liste de consoGES concernant l'alimentation, le transport, le logement et la consommation de biens et services
@@ -222,5 +224,8 @@ def getProprietesSR(systemeRelationnel) -> None:
 
     if(systemeRelationnel.estAsymetrique()) :
         print("Le système relationnel est asymétrique")
+    
+    if(systemeRelationnel.estTotale()) :
+        print("Le système relationnel est total")
 
 main()
