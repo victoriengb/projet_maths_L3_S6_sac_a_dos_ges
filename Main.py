@@ -31,7 +31,7 @@ def main () -> None :
     listeSacsADos = getSacsADos(alimentation, transport,  logement,  consommation)
 
     #Question 9 affichage front de Pareto
-    afficherFrontDePareto(listeSacsADos)
+    #afficherFrontDePareto(listeSacsADos)
 
     #TEST getSR_PD
     #print(getSR_PD(listeSacsADos).R_relationBinaire[0][0].__str__() + "\n" + getSR_PD(listeSacsADos).R_relationBinaire[0][1].__str__())
@@ -47,6 +47,11 @@ def main () -> None :
 
     #TEST filtre
     #nouvelle_listeSacsADos = filtre(0.0, listeSacsADos)
+
+    #Question 12
+    #systemeRelationnelPD = getSR_PD(listeSacsADos)
+    #getProprietesSR(systemeRelationnelPD)
+    
 
 #Question 5
 #getSacADos prend une liste de consoGES concernant l'alimentation, le transport, le logement et la consommation de biens et services
@@ -196,4 +201,26 @@ def getSR_Borne(B_borne, listeSacsADos) -> SystemeRelationnel :
             if (e1.getCoutGES() <= B_borne and e2.getCoutGES() > B_borne) or (e1.getCoutGES() <= B_borne and e2.getCoutGES() <= B_borne and e1.getUtilite() > e2.getUtilite()) :
                 systemeRelationnelBorne_B.R_relationBinaire.append((e1, e2))
     return systemeRelationnelBorne_B
+
+#Question 12
+#getProprieteSR prend en entrée un système relationnel et affiche ses propriétés sur la console
+def getProprietesSR(systemeRelationnel) -> None:
+    if(systemeRelationnel.estReflexive()) :
+        print("Le système relationnel est réflexif")
+
+    if(systemeRelationnel.estSymetrique()) :
+        print("Le système relationnel est symétrique")
+
+    if(systemeRelationnel.estTransitive()) :
+        print("Le système relationnel est transitif")
+
+    if(systemeRelationnel.estNegativementTransitive()) :
+        print("Le système relationnel est négativement transitif")
+
+    if(systemeRelationnel.estAntisymetrique()) :
+        print("Le système relationnel est antisymétrique")
+
+    if(systemeRelationnel.estAsymetrique()) :
+        print("Le système relationnel est asymétrique")
+
 main()
