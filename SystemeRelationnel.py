@@ -25,7 +25,26 @@ class SystemeRelationnel :
                 return estSymetrique
         return estSymetrique
     
+    #Générer via Google Bard car ma version avait une très mauvaise complexité
     def estTransitive(self) -> bool :
+        #Passage d'une liste de tuple à un ensemble - généré par Google Bard probablement pour des raisons de complexité dans les opération
+        relation_set = set(self.R_relationBinaire)
+
+        #Parcours des tuples de la relation
+        for a, b in self.R_relationBinaire:
+            #Parcours des éléments de l'ensemble sur lequel porte la relation
+            for c in self.A_ensembleDesElementsDuSysteme:
+                #Contrôle si la transitivité est brisée
+                if (a, b) in relation_set and (b, c) in relation_set and (a, c) not in relation_set:
+                    #Si oui on retourne faux, i.e, la relation n'est pas transitive
+                    return False
+
+        #Si non on retourne vrai, i.e, la relation est transitive
+        return True
+
+        """
+        Fait par moi
+
         estTransitive = True
         for a in self.A_ensembleDesElementsDuSysteme :
             for b in self.A_ensembleDesElementsDuSysteme :
@@ -33,9 +52,27 @@ class SystemeRelationnel :
                     if (a, b) in self.R_relationBinaire and (b, c) in self.R_relationBinaire and not (a, c) in self.R_relationBinaire :
                         estTransitive = False
                         return estTransitive
-        return estTransitive
-    
+        """
+
+    #Générer via Google Bard car ma version avait une très mauvaise complexité
     def estNegativementTransitive(self) -> bool :
+        
+        #Passage d'une liste de tuple à un ensemble - généré par Google Bard probablement pour des raisons de complexité dans les opération
+        relation_set = set(self.R_relationBinaire)
+
+        #Parcours des tuples de la relation
+        for a, b in self.R_relationBinaire:
+            #Parcours des éléments de l'ensemble sur lequel porte la relation
+            for c in self.A_ensembleDesElementsDuSysteme:
+                #Contrôle si la transitivité négative est brisée
+                if (a, b) not in relation_set and (b, c) not in relation_set and (a, c) in relation_set :
+                    #Si oui on retourne faux, i.e, la relation n'est pas négativement transitive
+                    return False
+        #Si non on retourne vrai, i.e, la relation est négativement transitive
+        return True
+    
+        """
+        Fait par moi
         estNegativementTransitive = True
         for a in self.A_ensembleDesElementsDuSysteme :
             for b in self.A_ensembleDesElementsDuSysteme :
@@ -44,6 +81,7 @@ class SystemeRelationnel :
                         estNegativementTransitive = False
                         return estNegativementTransitive
         return estNegativementTransitive
+        """
     
     def estAntisymetrique(self) -> bool :
         estAntisymetrique = True
