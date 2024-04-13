@@ -117,7 +117,7 @@ class SystemeRelationnel :
             for e in self.R_relationBinaire :
                 if(not e[0].__eq__(e[1]) and (e not in systemeRelationnel2.R_relationBinaire)) :
                     distance += 0.5
-            for e in systemeRelationnel2 :
+            for e in systemeRelationnel2.R_relationBinaire :
                 if(not e[0].__eq__(e[1]) and (e not in self.R_relationBinaire)) :
                     distance += 0.5
         return distance
