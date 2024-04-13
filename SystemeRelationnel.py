@@ -108,6 +108,20 @@ class SystemeRelationnel :
                     return estTotale
         return estTotale
     
+    #Question 13
+    #Renvoie la distance séparant deux systèmes relationnels
+    #la formule pour déterminer la distance entre deux systèmes relationnels est définie dans l'énoncé du projet
+    def distance(self, systemeRelationnel2) -> float :
+        distance = 0.0
+        if(isinstance(systemeRelationnel2, SystemeRelationnel)) :
+            for e in self.R_relationBinaire :
+                if(not e[0].__eq__(e[1]) and (e not in systemeRelationnel2.R_relationBinaire)) :
+                    distance += 0.5
+            for e in systemeRelationnel2 :
+                if(not e[0].__eq__(e[1]) and (e not in self.R_relationBinaire)) :
+                    distance += 0.5
+        return distance
+    
     def __str__(self) -> str:
         return "Le système relationnel est composé de la relation binaire : " + str(self.R_relationBinaire)
     

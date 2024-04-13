@@ -31,6 +31,13 @@ class SacADosGES :
     def estValide(self, B_borne) -> bool :
         return self.getCoutGES() <= B_borne
     
+    #Question 13
+    #Nouvelle implémentation de la méthode __eq__
+    #Indique si le sac à dos appelant la méthode à la même utilité et le même coût GES que le sac à dos donné en paramètre
+    def __eq__(self, sac2) -> bool:
+        if(isinstance(sac2, SacADosGES)) :
+            return self.getCoutGES() == sac2.getCoutGES() and self.getUtilite() == sac2.getUtilite()
+    
     #Renvoie une description textuelle de l'objet
     def __str__(self) -> str:
 
