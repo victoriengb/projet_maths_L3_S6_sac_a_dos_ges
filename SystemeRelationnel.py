@@ -20,7 +20,7 @@ class SystemeRelationnel :
     def estSymetrique(self) -> bool :
         estSymetrique = True
         for e in self.R_relationBinaire :
-            if not ((e[1], [0]) in self.R_relationBinaire) :
+            if not ((e[1], e[0]) in self.R_relationBinaire) :
                 estSymetrique = False
                 return estSymetrique
         return estSymetrique
