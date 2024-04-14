@@ -86,7 +86,7 @@ class SystemeRelationnel :
     def estAntisymetrique(self) -> bool :
         estAntisymetrique = True
         for e in self.R_relationBinaire :
-            if ((e[1], e[0]) in self.R_relationBinaire) and (e[0] != e[1]) :
+            if ((e[1], e[0]) in self.R_relationBinaire) and (not e[0] == e[1]) :
                 estAntisymetrique = False
                 return estAntisymetrique
         return estAntisymetrique
