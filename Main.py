@@ -3,7 +3,7 @@ from SacADosGES import SacADosGES
 from SystemeRelationnel import SystemeRelationnel
 
 import matplotlib.pyplot as plt
-
+from itertools import product
 """Main est la classe qui exécute le programme"""
 
 #Méthode exécutant le programme
@@ -29,7 +29,13 @@ def main () -> None :
                     ConsoGES(1.3, 6, "Consommation sobre de bien et services")]
     
     listeSacsADos = getSacsADos(alimentation, transport,  logement,  consommation)
-
+    print(len(listeSacsADos))
+    
+    
+    for e in listeSacsADos :
+        print(e.consommation.__str__())
+        
+    
     #Question 9 affichage front de Pareto
     #afficherFrontDePareto(listeSacsADos)
 
@@ -48,17 +54,55 @@ def main () -> None :
     #TEST filtre
     #nouvelle_listeSacsADos = filtre(0.0, listeSacsADos)
 
+    #systemeRelationnel_PD = getSR_PD(listeSacsADos)
+    #systemeRelationnel_LexC = getSR_LexC(listeSacsADos)
+    #systemeRelationnel_LexU = getSR_LexU(listeSacsADos)
+    #systemeRelationnel_Borne = getSR_Borne(5.0, listeSacsADos)
+
     #Question 12
-    #systemeRelationnelPD = getSR_PD(listeSacsADos)
+    """
+    systemeRelationnelPD = getSR_PD(listeSacsADos)
     #getProprietesSR(systemeRelationnelPD)
-    
+    liste = []
+    for a, b in systemeRelationnelPD.R_relationBinaire :
+        liste.append(systemeRelationnelPD.contientCoupleSacs(a, b))
+    print(liste)
     #getProprietesSR(getSR_Borne(5.0, listeSacsADos))
-    print(getSR_Borne(5.0, listeSacsADos).estTotale())
+    """
+
+    #print(systemeRelationnel_PD.estTransitive())
+
+    #Question 14
+
+    #print("La distance entre le système relationnel de Pareto-dominance et la relation lexicographique relative au coût GES est : " + str(systemeRelationnel_PD.distance(systemeRelationnel_LexC)))
+    
+    """
+    float_list = [float(x) for x in range(0, 51, 5)]
+    float_list = [x / 2.0 for x in float_list]
+    listeDistances = []
+
+    Distance avec la relation bornée
+    for B_borne in float_list :
+        systemeRelationnel_Borne_Q13 = getSR_Borne(B_borne, listeSacsADos)
+        listeDistances.append(systemeRelationnel_Borne_Q13.distance(systemeRelationnel_PD))
+    print(listeDistances)
+    """
 
 #Question 5
 #getSacADos prend une liste de consoGES concernant l'alimentation, le transport, le logement et la consommation de biens et services
 #getSacADos renvoie une liste contenant l'ensemble des sacs à dos pouvant être conçus à partir des listes données en paramètres
+#L'idée d'utiliser le produit cartésien product vient de ChatGPT
 def getSacsADos(alimentation, transport, logement, consommation):
+
+    listeElementSacsADos = list(product(alimentation, transport,  logement,  consommation))
+
+    listeSacsADos = []
+    for e in listeElementSacsADos:
+        listeSacsADos.append(SacADosGES(e[0], e[1], e[2], e[3]))
+
+    return listeSacsADos
+    """
+    FAIT PAR MOI
     listeSacsADos = [SacADosGES(ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, ""))]
 
     #Chaque usage de append est positionné dans la boucle la plus interne concernant les éléments consoGES ajoutés dans le sac à dos
@@ -91,7 +135,7 @@ def getSacsADos(alimentation, transport, logement, consommation):
                     listeSacsADos.append(SacADosGES(c, a, t, l))             
     
     return list(listeSacsADos)
-
+    """
 #Question 5
 #Générer partiellement via Google Bard car le même raisonnement avec une boucle for ne fonctionnait pas à cause d'un problème d'indexation
 #La méthode filtre copie la liste de sacs à dos pour ne pas la modifier puis la parcourt grâce à une boucle while tout en supprimant les sacs à dos non valide
