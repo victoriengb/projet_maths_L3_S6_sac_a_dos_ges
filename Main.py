@@ -72,18 +72,20 @@ def main () -> None :
     #Question 14
 
     #print("La distance entre le système relationnel de Pareto-dominance et la relation lexicographique relative au coût GES est : " + str(systemeRelationnel_PD.distance(systemeRelationnel_LexC)))
+    #print("La distance entre le système relationnel de Pareto-dominance et la relation lexicographique relative à l'utilité est : " + str(systemeRelationnel_PD.distance(systemeRelationnel_LexU)))
+    #print("La distance entre la relation lexicographique relative à l'utilité et la relation lexicographique relative au coût GES est : " + str(systemeRelationnel_LexU.distance(systemeRelationnel_LexC)))
     
-    """
-    float_list = [float(x) for x in range(0, 51, 5)]
+    
+    float_list = [float(x) for x in range(0, 26, 5)]
     float_list = [x / 2.0 for x in float_list]
-    listeDistances = []
 
-    Distance avec la relation bornée
-    for B_borne in float_list :
-        systemeRelationnel_Borne_Q13 = getSR_Borne(B_borne, listeSacsADos)
-        listeDistances.append(systemeRelationnel_Borne_Q13.distance(systemeRelationnel_PD))
-    print(listeDistances)
-    """
+    #Distance avec la relation bornée
+    #for B_borne in float_list :
+        #systemeRelationnel_Borne_Q13 = getSR_Borne(B_borne, listeSacsADos)
+        #print("La distance entre la relation bornée de borne " + str(B_borne) + "et la relation lexicographique relative au coût GES est : " + str(systemeRelationnel_Borne_Q13.distance(systemeRelationnel_LexC)))
+        #print("La distance entre la relation bornée de borne " + str(B_borne) + "et la relation lexicographique relative à l'utilité est : " + str(systemeRelationnel_Borne_Q13.distance(systemeRelationnel_LexU)))
+        #print("La distance entre la relation bornée de borne " + str(B_borne) + "et la relation de Pareto-dominance est : " + str(systemeRelationnel_Borne_Q13.distance(systemeRelationnel_LexU)))
+    afficherUtiliteOptimale(listeSacsADos)
 
 #Question 5
 #getSacADos prend une liste de consoGES concernant l'alimentation, le transport, le logement et la consommation de biens et services
@@ -269,4 +271,29 @@ def getProprietesSR(systemeRelationnel) -> None:
     if(systemeRelationnel.estTotale()) :
         print("Le système relationnel est total")
 
+#Question 15
+
+def utiliteMax(B_borne, listeSacsADos) :
+    systemeRelationnel_Borne = getSR_Borne(B_borne, listeSacsADos)
+    utiliteMax = 0
+
+    for e in systemeRelationnel_Borne.R_relationBinaire :
+        if(e[0].utilite > utiliteMax) :
+            utiliteMax = e[0].utilite
+    return utiliteMax
+
+def afficherUtiliteOptimale(listeSacsADos) :
+    liste_Bornes = [float(x) for x in range(0, 26, 5)]
+    liste_Bornes = [x / 2.0 for x in liste_Bornes]
+
+    liste_UtilitesMax = []
+
+    for e in liste_Bornes :
+        liste_UtilitesMax.append(utiliteMax(e, listeSacsADos))
+    
+    plt.scatter(liste_Bornes, liste_UtilitesMax)
+    plt.xlabel("Borne")
+    plt.ylabel("Utilité Maximale")
+    plt.title("Utilité maximale en fonction de la borne")
+    plt.show()
 main()
