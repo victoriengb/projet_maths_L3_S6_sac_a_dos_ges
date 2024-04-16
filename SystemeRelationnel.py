@@ -99,6 +99,7 @@ class SystemeRelationnel :
             for e in systemeRelationnel2.R_relationBinaire :
                 if(not e[0].__eq__(e[1]) and (not self.contientCoupleSacs(e[0], e[1]))) :
                     distance += 0.5
+        
         return distance
     
     def __str__(self) -> str:

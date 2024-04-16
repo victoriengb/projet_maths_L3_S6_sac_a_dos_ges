@@ -24,6 +24,12 @@ class ConsoGES :
     def getUtilite(self) -> int :
         return self.utilite
 
+    #Redéfinition méthode __eq__
+    #Deux postes de consommations sont considérés égaux s'ils ont le même coût GES, la même utilité et la même description
+    def __eq__(self, consoGES2) -> bool:
+        if(isinstance(consoGES2, ConsoGES)) :
+            return self.coutGES == consoGES2.coutGES and self.utilite == consoGES2.utilite and self.description == consoGES2.description
+
     #Renvoie une description textuelle de l'objet
     def __str__(self) -> str:
         return self.description + " a une utilité de : " + str(self.utilite) + " et un coût GES de : " + str(self.coutGES)
