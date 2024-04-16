@@ -28,13 +28,8 @@ def main () -> None :
     consommation = [ConsoGES(2.5, 10, "Consommation importante de bien et services"), 
                     ConsoGES(1.3, 6, "Consommation sobre de bien et services")]
     
+    #Question 5 - Ensemble des sacs à dos possibles
     listeSacsADos = getSacsADos(alimentation, transport,  logement,  consommation)
-    print(len(listeSacsADos))
-    
-    
-    for e in listeSacsADos :
-        print(e.consommation.__str__())
-        
     
     #Question 9 affichage front de Pareto
     #afficherFrontDePareto(listeSacsADos)
@@ -54,23 +49,25 @@ def main () -> None :
     #TEST filtre
     #nouvelle_listeSacsADos = filtre(0.0, listeSacsADos)
 
-    #systemeRelationnel_PD = getSR_PD(listeSacsADos)
-    #systemeRelationnel_LexC = getSR_LexC(listeSacsADos)
-    #systemeRelationnel_LexU = getSR_LexU(listeSacsADos)
-    #systemeRelationnel_Borne = getSR_Borne(5.0, listeSacsADos)
+    systemeRelationnel_PD = getSR_PD(listeSacsADos)
+    systemeRelationnel_LexC = getSR_LexC(listeSacsADos)
+    systemeRelationnel_LexU = getSR_LexU(listeSacsADos)
+    systemeRelationnel_Borne = getSR_Borne(5.0, listeSacsADos)
 
-    #Question 12
-    """
-    systemeRelationnelPD = getSR_PD(listeSacsADos)
-    #getProprietesSR(systemeRelationnelPD)
-    liste = []
-    for a, b in systemeRelationnelPD.R_relationBinaire :
-        liste.append(systemeRelationnelPD.contientCoupleSacs(a, b))
-    print(liste)
-    #getProprietesSR(getSR_Borne(5.0, listeSacsADos))
-    """
+    #Question 12 - Temps d'exécution : 6min30s
 
-    #print(systemeRelationnel_PD.estTransitive())
+    #getProprietesSR(systemeRelationnel_PD)
+    #print("_______________________________________")
+
+    #getProprietesSR(systemeRelationnel_LexC)
+    #print("_______________________________________")
+
+    #getProprietesSR(systemeRelationnel_LexU)
+    #print("_______________________________________")
+
+    #getProprietesSR(systemeRelationnel_Borne)
+    #print("_______________________________________")
+
 
     #Question 14
 
@@ -167,7 +164,7 @@ def getSR_PD(listeSacsADos) -> SystemeRelationnel :
     for e1 in systemeRelationnelPD.A_ensembleDesElementsDuSysteme :
         for e2 in systemeRelationnelPD.A_ensembleDesElementsDuSysteme :
             #Le test conditionnel correspond à la définition de la Pareto-dominance
-            if (e1.getCoutGES() < e2.getCoutGES() and e1.getUtilite() >= e2.getUtilite()) or (e1.getCoutGES() <= e2.getCoutGES() and e1.getUtilite() > e2.getUtilite()) :
+            if (e1.coutGES < e2.coutGES and e1.utilite >= e2.utilite) or (e1.coutGES <= e2.coutGES and e1.utilite > e2.utilite) :
                 systemeRelationnelPD.R_relationBinaire.append((e1, e2))
     return systemeRelationnelPD
 
@@ -213,7 +210,7 @@ def getSR_LexU(listeSacsADos) -> SystemeRelationnel :
     for e1 in systemeRelationnelLexU.A_ensembleDesElementsDuSysteme :
         for e2 in systemeRelationnelLexU.A_ensembleDesElementsDuSysteme :
             #Le test conditionnel correspond à la définition de la relation lexicographiqueU
-            if (e1.getUtilite() > e2.getUtilite()) or (e1.getUtilite() == e2.getUtilite() and e1.getCoutGES() < e2.getCoutGES()) :
+            if (e1.utilite > e2.utilite) or (e1.utilite == e2.utilite and e1.coutGES < e2.coutGES) :
                 systemeRelationnelLexU.R_relationBinaire.append((e1, e2))
     return systemeRelationnelLexU
 
@@ -229,7 +226,7 @@ def getSR_LexC(listeSacsADos) -> SystemeRelationnel :
     for e1 in systemeRelationnelLexC.A_ensembleDesElementsDuSysteme :
         for e2 in systemeRelationnelLexC.A_ensembleDesElementsDuSysteme :
             #Le test conditionnel correspond à la définition de la relation lexicographiqueU
-            if (e1.getCoutGES() < e2.getCoutGES()) or (e1.getCoutGES() == e2.getCoutGES() and e1.getUtilite() > e2.getUtilite()) :
+            if (e1.coutGES < e2.coutGES) or (e1.coutGES == e2.coutGES and e1.utilite > e2.utilite) :
                 systemeRelationnelLexC.R_relationBinaire.append((e1, e2))
     return systemeRelationnelLexC
 
@@ -244,7 +241,7 @@ def getSR_Borne(B_borne, listeSacsADos) -> SystemeRelationnel :
     for e1 in systemeRelationnelBorne_B.A_ensembleDesElementsDuSysteme :
         for e2 in systemeRelationnelBorne_B.A_ensembleDesElementsDuSysteme :
             #Le test conditionnel correspond à la définition de la relation bornée de borne B
-            if (e1.getCoutGES() <= B_borne and e2.getCoutGES() > B_borne) or (e1.getCoutGES() <= B_borne and e2.getCoutGES() <= B_borne and e1.getUtilite() > e2.getUtilite()) :
+            if (e1.coutGES <= B_borne and e2.coutGES > B_borne) or (e1.coutGES <= B_borne and e2.coutGES <= B_borne and e1.utilite > e2.utilite) :
                 systemeRelationnelBorne_B.R_relationBinaire.append((e1, e2))
     return systemeRelationnelBorne_B
 

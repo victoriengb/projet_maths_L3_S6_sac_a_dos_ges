@@ -3,7 +3,8 @@ class SystemeRelationnel :
 
     A_ensembleDesElementsDuSysteme = []
     R_relationBinaire = [()]
-
+    #R_relationBinaire = {()}
+    
     def __init__(self, A_ensembleDesElementsDuSysteme, R_relationBinaire) -> None :
         self.A_ensembleDesElementsDuSysteme = A_ensembleDesElementsDuSysteme
         self.R_relationBinaire = R_relationBinaire
@@ -35,8 +36,7 @@ class SystemeRelationnel :
     
     #Générer via Google Bard car ma version avait une très mauvaise complexité
     def estTransitive(self) -> bool :
-
-        #Parcours des tuples de la relation
+        #Parcours des tuples de la relation - La syntaxe de la boucle for (et seulement elle) est inspirée d'un code de Google Bard
         for a, b in self.R_relationBinaire:
             #Parcours des éléments de l'ensemble sur lequel porte la relation
             for c in self.A_ensembleDesElementsDuSysteme:
@@ -47,18 +47,6 @@ class SystemeRelationnel :
 
         #Si non on retourne vrai, i.e, la relation est transitive
         return True
-
-        """
-        Fait par moi
-
-        estTransitive = True
-        for a in self.A_ensembleDesElementsDuSysteme :
-            for b in self.A_ensembleDesElementsDuSysteme :
-                for c in self.A_ensembleDesElementsDuSysteme :
-                    if (a, b) in self.R_relationBinaire and (b, c) in self.R_relationBinaire and not (a, c) in self.R_relationBinaire :
-                        estTransitive = False
-                        return estTransitive
-        """
 
     #Générer via Google Bard car ma version avait une très mauvaise complexité
     def estNegativementTransitive(self) -> bool :
@@ -74,23 +62,9 @@ class SystemeRelationnel :
         #Si non on retourne vrai, i.e, la relation est négativement transitive
         return True
     
-        """
-        Fait par moi
-        estNegativementTransitive = True
-        for a in self.A_ensembleDesElementsDuSysteme :
-            for b in self.A_ensembleDesElementsDuSysteme :
-                for c in self.A_ensembleDesElementsDuSysteme :
-                    if (a, b) not in self.R_relationBinaire and (b, c) not in self.R_relationBinaire and (a, c) in self.R_relationBinaire :
-                        estNegativementTransitive = False
-                        return estNegativementTransitive
-        return estNegativementTransitive
-        """
-    
     def estAntisymetrique(self) -> bool :
         estAntisymetrique = True
         for e in self.R_relationBinaire :
-            #if ((e[1], e[0]) in self.R_relationBinaire) and (e[0] != e[1]) :
-            #if not e[0].estIdentique(e[1]) and ((e[1], e[0]) in self.R_relationBinaire) :
             if not e[0].estIdentique(e[1]) and self.contientCoupleSacs(e[1], e[0]) :
                 estAntisymetrique = False
                 return estAntisymetrique
@@ -120,10 +94,10 @@ class SystemeRelationnel :
         distance = 0.0
         if(isinstance(systemeRelationnel2, SystemeRelationnel)) :
             for e in self.R_relationBinaire :
-                if(not e[0].__eq__(e[1]) and (not systemeRelationnel2.contientCoupleSacs(e))) :
+                if(not e[0].__eq__(e[1]) and (not systemeRelationnel2.contientCoupleSacs(e[0], e[1]))) :
                     distance += 0.5
             for e in systemeRelationnel2.R_relationBinaire :
-                if(not e[0].__eq__(e[1]) and (not self.contientCoupleSacs(e))) :
+                if(not e[0].__eq__(e[1]) and (not self.contientCoupleSacs(e[0], e[1]))) :
                     distance += 0.5
         return distance
     
