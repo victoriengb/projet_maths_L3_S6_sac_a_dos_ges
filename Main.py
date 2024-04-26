@@ -4,6 +4,8 @@ from SystemeRelationnel import SystemeRelationnel
 
 import matplotlib.pyplot as plt
 from itertools import product
+from mip import Model, xsum, BINARY, MAXIMIZE, CBC, CONTINUOUS
+
 """Main est la classe qui exécute le programme"""
 
 #Méthode exécutant le programme
@@ -76,16 +78,50 @@ def main () -> None :
     #print("La distance entre la relation lexicographique relative à l'utilité et la relation lexicographique relative au coût GES est : " + str(systemeRelationnel_LexU.distance(systemeRelationnel_LexC)))
     
     
+    #float_list correspond à des valeurs de bornes
     float_list = [float(x) for x in range(0, 26, 5)]
     float_list = [x / 2.0 for x in float_list]
 
+    distances_SR_Borne_SRLexC = []
+    distances_SR_Borne_SRLexU = []
+    distances_SR_Borne_SRPD = []
     #Distance avec la relation bornée
-    #for B_borne in float_list :
-        #systemeRelationnel_Borne_Q13 = getSR_Borne(B_borne, listeSacsADos)
+    for B_borne in float_list :
+        systemeRelationnel_Borne_Q13 = getSR_Borne(B_borne, listeSacsADos)
         #print("La distance entre la relation bornée de borne " + str(B_borne) + "et la relation lexicographique relative au coût GES est : " + str(systemeRelationnel_Borne_Q13.distance(systemeRelationnel_LexC)))
         #print("La distance entre la relation bornée de borne " + str(B_borne) + "et la relation lexicographique relative à l'utilité est : " + str(systemeRelationnel_Borne_Q13.distance(systemeRelationnel_LexU)))
-        #print("La distance entre la relation bornée de borne " + str(B_borne) + "et la relation de Pareto-dominance est : " + str(systemeRelationnel_Borne_Q13.distance(systemeRelationnel_LexU)))
-    afficherUtiliteOptimale(listeSacsADos)
+        #print("La distance entre la relation bornée de borne " + str(B_borne) + "et la relation de Pareto-dominance est : " + str(systemeRelationnel_Borne_Q13.distance(systemeRelationnel_PD)))
+        
+        distances_SR_Borne_SRLexC.append(systemeRelationnel_Borne_Q13.distance(systemeRelationnel_LexC))
+        distances_SR_Borne_SRLexU.append(systemeRelationnel_Borne_Q13.distance(systemeRelationnel_LexU))
+        distances_SR_Borne_SRPD.append(systemeRelationnel_Borne_Q13.distance(systemeRelationnel_PD))
+
+    #plt.scatter(float_list, distances_SR_Borne_SRLexC)
+    #plt.xlabel("Valeur de Borne")
+    #plt.ylabel("Distance entre SR_Borne et SR_LexC")
+    #plt.title("Distance entre le système relationnel borné et le système relationnel lexicographique relatif aux coûts GES")
+    #plt.show()
+
+    #plt.scatter(float_list, distances_SR_Borne_SRLexU)
+    #plt.xlabel("Valeur de Borne")
+    #plt.ylabel("Distance entre SR_Borne et SR_LexU")
+    #plt.title("Distance entre le système relationnel borné et le système relationnel lexicographique relatif à l'utilité")
+    #plt.show()
+
+    plt.scatter(float_list, distances_SR_Borne_SRPD)
+    plt.xlabel("Valeur de Borne")
+    plt.ylabel("Distance entre SR_Borne et SR_PD")
+    plt.title("Distance entre le système relationnel borné et le système relationnel de Pareto-dominance")
+    plt.show()
+
+    #Question 16
+    #afficherUtiliteOptimale(listeSacsADos)
+
+    #Question 17
+    #help(Model)
+    #P_ensemble_preferences = [(listeSacsADos[0], listeSacsADos[1])]
+    #estOrdDomine(P_ensemble_preferences, listeSacsADos[0], listeSacsADos[1])
+    
 
 #Question 5
 #getSacADos prend une liste de consoGES concernant l'alimentation, le transport, le logement et la consommation de biens et services
@@ -282,6 +318,7 @@ def utiliteMax(B_borne, listeSacsADos) :
             utiliteMax = e[0].utilite
     return utiliteMax
 
+#Question 16
 def afficherUtiliteOptimale(listeSacsADos) :
     liste_Bornes = [float(x) for x in range(0, 26, 5)]
     liste_Bornes = [x / 2.0 for x in liste_Bornes]
@@ -296,4 +333,36 @@ def afficherUtiliteOptimale(listeSacsADos) :
     plt.ylabel("Utilité Maximale")
     plt.title("Utilité maximale en fonction de la borne")
     plt.show()
+
+#Question 17
+#Générer via Google Gemini
+"""
+def estOrdDomine(P_ensemble_preferences, k1, k2) :
+    #initialisation du modèle
+    #model = Model(sense=MAXIMIZE, solver_name=CBC)
+    model = Model("OrdDomine")
+
+    #Ensemble des variables d'utilités
+    variables_utilite = {}
+    #for sac in P_ensemble_preferences :
+    for i in range(len(P_ensemble_preferences)*2) :
+        variables_utilite[i] = model.add_var(var_type = CONTINUOUS, lb=0, ub=1)
+
+    
+    for k1, k2 in P :
+        model.add_constr(sum(variables_utilite[c] for c in k1) > sum(variables_utilite[c] for c in k2))
+
+    # Objectif
+    model.objective = 0
+
+    # Résolution du modèle
+    model.optimize()
+
+    # Vérification de la domination ordinale
+    if model.status == mip.OptimizationStatus.OPTIMAL:
+        return True
+    else:
+        return False
+"""
+
 main()
