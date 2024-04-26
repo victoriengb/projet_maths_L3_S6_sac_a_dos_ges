@@ -4,7 +4,6 @@ from SystemeRelationnel import SystemeRelationnel
 
 import matplotlib.pyplot as plt
 from itertools import product
-from mip import Model, xsum, BINARY, MAXIMIZE, CBC, CONTINUOUS
 
 """Main est la classe qui exécute le programme"""
 
@@ -51,12 +50,16 @@ def main () -> None :
     #TEST filtre
     #nouvelle_listeSacsADos = filtre(0.0, listeSacsADos)
 
+    #Initialisation du système relationnel de Pareto-dominance
     systemeRelationnel_PD = getSR_PD(listeSacsADos)
+    #Initialisation du système relationnel lexicographique relatif aux coûts GES
     systemeRelationnel_LexC = getSR_LexC(listeSacsADos)
+    #Initialisation du système relationnel lexicographique relatif aux utilités
     systemeRelationnel_LexU = getSR_LexU(listeSacsADos)
+    #Initialisation du système relationnel borné
     systemeRelationnel_Borne = getSR_Borne(5.0, listeSacsADos)
 
-    #Question 12 - Temps d'exécution : 6min30s
+    #Question 12 - Temps d'exécution : 6min30s - Affiche les propriétés des systèmes relationnels
 
     #getProprietesSR(systemeRelationnel_PD)
     #print("_______________________________________")
@@ -73,6 +76,7 @@ def main () -> None :
 
     #Question 14
 
+    #Affichage des distances entre systèmes relationnels
     #print("La distance entre le système relationnel de Pareto-dominance et la relation lexicographique relative au coût GES est : " + str(systemeRelationnel_PD.distance(systemeRelationnel_LexC)))
     #print("La distance entre le système relationnel de Pareto-dominance et la relation lexicographique relative à l'utilité est : " + str(systemeRelationnel_PD.distance(systemeRelationnel_LexU)))
     #print("La distance entre la relation lexicographique relative à l'utilité et la relation lexicographique relative au coût GES est : " + str(systemeRelationnel_LexU.distance(systemeRelationnel_LexC)))
@@ -82,46 +86,49 @@ def main () -> None :
     float_list = [float(x) for x in range(0, 26, 5)]
     float_list = [x / 2.0 for x in float_list]
 
+    #liste contenant la distance entre le système relationnel lexicographique relatif aux coûts GES et le système relationnel borné (on fait varier la borne)
     distances_SR_Borne_SRLexC = []
+    #liste contenant la distance entre le système relationnel lexicographique relatif aux utilités et le système relationnel borné (on fait varier la borne)
     distances_SR_Borne_SRLexU = []
+    #liste contenant la distance entre le système relationnel de Pareto-dominance et le système relationnel borné (on fait varier la borne)
     distances_SR_Borne_SRPD = []
-    #Distance avec la relation bornée
+
+    #Distance avec le système relationnel borné en faisant varier la borne
     for B_borne in float_list :
+        #On initialise le système relationnel borné avec la borne B_borne
         systemeRelationnel_Borne_Q13 = getSR_Borne(B_borne, listeSacsADos)
-        #print("La distance entre la relation bornée de borne " + str(B_borne) + "et la relation lexicographique relative au coût GES est : " + str(systemeRelationnel_Borne_Q13.distance(systemeRelationnel_LexC)))
-        #print("La distance entre la relation bornée de borne " + str(B_borne) + "et la relation lexicographique relative à l'utilité est : " + str(systemeRelationnel_Borne_Q13.distance(systemeRelationnel_LexU)))
-        #print("La distance entre la relation bornée de borne " + str(B_borne) + "et la relation de Pareto-dominance est : " + str(systemeRelationnel_Borne_Q13.distance(systemeRelationnel_PD)))
         
+        #Ajout de la distance entre le système relationnel lexicographique relatif aux coûts GES et le système relationnel borné
         distances_SR_Borne_SRLexC.append(systemeRelationnel_Borne_Q13.distance(systemeRelationnel_LexC))
+        #Ajout de la distance entre le système relationnel lexicographique relatif aux utilités et le système relationnel borné
         distances_SR_Borne_SRLexU.append(systemeRelationnel_Borne_Q13.distance(systemeRelationnel_LexU))
+        #Ajout de la distance entre le système relationnel de Pareto-dominance et le système relationnel borné
         distances_SR_Borne_SRPD.append(systemeRelationnel_Borne_Q13.distance(systemeRelationnel_PD))
 
+    #Affichage d'un graphique montrant en abscisse les bornes et en ordonnée la distance entre le système relationnel lexicographique relatif aux coûts GES et le système relationnel borné
     #plt.scatter(float_list, distances_SR_Borne_SRLexC)
     #plt.xlabel("Valeur de Borne")
     #plt.ylabel("Distance entre SR_Borne et SR_LexC")
     #plt.title("Distance entre le système relationnel borné et le système relationnel lexicographique relatif aux coûts GES")
     #plt.show()
 
+    #Affichage d'un graphique montrant en abscisse les bornes et en ordonnée la distance entre le système relationnel lexicographique relatif aux utilités et le système relationnel borné
     #plt.scatter(float_list, distances_SR_Borne_SRLexU)
     #plt.xlabel("Valeur de Borne")
     #plt.ylabel("Distance entre SR_Borne et SR_LexU")
     #plt.title("Distance entre le système relationnel borné et le système relationnel lexicographique relatif à l'utilité")
     #plt.show()
 
+    #Affichage d'un graphique montrant en abscisse les bornes et en ordonnée la distance entre le système relationnel de Pareto-dominance et le système relationnel borné
     plt.scatter(float_list, distances_SR_Borne_SRPD)
     plt.xlabel("Valeur de Borne")
     plt.ylabel("Distance entre SR_Borne et SR_PD")
     plt.title("Distance entre le système relationnel borné et le système relationnel de Pareto-dominance")
     plt.show()
 
-    #Question 16
+    #Question 16 - Affiche l'utilité optimale des sacs à dos du système relationnel borné en faisant varier la borne
     #afficherUtiliteOptimale(listeSacsADos)
-
-    #Question 17
-    #help(Model)
-    #P_ensemble_preferences = [(listeSacsADos[0], listeSacsADos[1])]
-    #estOrdDomine(P_ensemble_preferences, listeSacsADos[0], listeSacsADos[1])
-    
+ 
 
 #Question 5
 #getSacADos prend une liste de consoGES concernant l'alimentation, le transport, le logement et la consommation de biens et services
@@ -136,41 +143,7 @@ def getSacsADos(alimentation, transport, logement, consommation):
         listeSacsADos.append(SacADosGES(e[0], e[1], e[2], e[3]))
 
     return listeSacsADos
-    """
-    FAIT PAR MOI
-    listeSacsADos = [SacADosGES(ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, ""))]
-
-    #Chaque usage de append est positionné dans la boucle la plus interne concernant les éléments consoGES ajoutés dans le sac à dos
-    #e.g : lorsqu'on append un élément de consommation, on le met dans la boucle for concernant les éléments c de consommation
-    #cela permet d'éviter les doublons
-    for a in alimentation :
-        listeSacsADos.append(SacADosGES(ConsoGES(0.0, 0, ""), a, ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, "")))
-
-        for t in transport :
-            listeSacsADos.append(SacADosGES(ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, ""), t, ConsoGES(0.0, 0, "")))
-            listeSacsADos.append(SacADosGES(ConsoGES(0.0, 0, ""), a, t, ConsoGES(0.0, 0, "")))
-
-            for l in logement :
-                listeSacsADos.append(SacADosGES(ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, ""), l))
-                listeSacsADos.append(SacADosGES(ConsoGES(0.0, 0, ""), a, ConsoGES(0.0, 0, ""), l))
-                listeSacsADos.append(SacADosGES(ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, ""), t, l))
-                listeSacsADos.append(SacADosGES(ConsoGES(0.0, 0, ""), a, t, l))
-
-                for c in consommation :
-                    #(consommation, alimentation, transport, logement)
-                    listeSacsADos.append(SacADosGES(c, ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, "")))
-                    listeSacsADos.append(SacADosGES(c, a, ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, "")))
-                    listeSacsADos.append(SacADosGES(c, ConsoGES(0.0, 0, ""), t, ConsoGES(0.0, 0, "")))
-                    listeSacsADos.append(SacADosGES(c, ConsoGES(0.0, 0, ""), ConsoGES(0.0, 0, ""), l))
-
-                    listeSacsADos.append(SacADosGES(c, a, t, ConsoGES(0.0, 0, "")))
-                    listeSacsADos.append(SacADosGES(c, a, ConsoGES(0.0, 0, ""), l))
-                    listeSacsADos.append(SacADosGES(c, ConsoGES(0.0, 0, ""), t, l))
-
-                    listeSacsADos.append(SacADosGES(c, a, t, l))             
     
-    return list(listeSacsADos)
-    """
 #Question 5
 #Générer partiellement via Google Bard car le même raisonnement avec une boucle for ne fonctionnait pas à cause d'un problème d'indexation
 #La méthode filtre copie la liste de sacs à dos pour ne pas la modifier puis la parcourt grâce à une boucle while tout en supprimant les sacs à dos non valide
@@ -307,7 +280,7 @@ def getProprietesSR(systemeRelationnel) -> None:
     if(systemeRelationnel.estTotale()) :
         print("Le système relationnel est total")
 
-#Question 15
+#Question 15 - Renvoie l'utilité maximale d'un sac à dos dont le coût GES est inférieur à la borne
 
 def utiliteMax(B_borne, listeSacsADos) :
     systemeRelationnel_Borne = getSR_Borne(B_borne, listeSacsADos)
@@ -318,7 +291,7 @@ def utiliteMax(B_borne, listeSacsADos) :
             utiliteMax = e[0].utilite
     return utiliteMax
 
-#Question 16
+#Question 16 - Affiche un graphique montrant l'utilité maximale des sacs à dos dont le coût GES est inférieur à une borne qu'on fait varier
 def afficherUtiliteOptimale(listeSacsADos) :
     liste_Bornes = [float(x) for x in range(0, 26, 5)]
     liste_Bornes = [x / 2.0 for x in liste_Bornes]
@@ -334,35 +307,5 @@ def afficherUtiliteOptimale(listeSacsADos) :
     plt.title("Utilité maximale en fonction de la borne")
     plt.show()
 
-#Question 17
-#Générer via Google Gemini
-"""
-def estOrdDomine(P_ensemble_preferences, k1, k2) :
-    #initialisation du modèle
-    #model = Model(sense=MAXIMIZE, solver_name=CBC)
-    model = Model("OrdDomine")
-
-    #Ensemble des variables d'utilités
-    variables_utilite = {}
-    #for sac in P_ensemble_preferences :
-    for i in range(len(P_ensemble_preferences)*2) :
-        variables_utilite[i] = model.add_var(var_type = CONTINUOUS, lb=0, ub=1)
-
-    
-    for k1, k2 in P :
-        model.add_constr(sum(variables_utilite[c] for c in k1) > sum(variables_utilite[c] for c in k2))
-
-    # Objectif
-    model.objective = 0
-
-    # Résolution du modèle
-    model.optimize()
-
-    # Vérification de la domination ordinale
-    if model.status == mip.OptimizationStatus.OPTIMAL:
-        return True
-    else:
-        return False
-"""
-
+#Exécution de la fonction main qui lance l'entièreté du programme
 main()
