@@ -3,6 +3,7 @@ from ConsoGES import ConsoGES
 class SacADosGES :
     """Un sac à dos GES représente les biens et services consommés par une personne"""
 
+    #La classe SacADos GES a été créée en réponse à la Question 3
     #objet ConsoGES correspondant aux consommations possibles
     consommation = ConsoGES(0.0, 0, "")
     #objet ConsoGES correspondant aux alimentations possibles
@@ -27,14 +28,17 @@ class SacADosGES :
         self.coutGES = self.getCoutGES()
         self.utilite = self.getUtilite()
 
+    #Question 4
     #Méthode renvoyant le coût GES total du sac
     def getCoutGES(self) -> float :
         return round(self.consommation.getCoutGES() + self.alimentation.getCoutGES() + self.transport.getCoutGES() + self.logement.getCoutGES(), 1)
 
+    #Question 4
     #Méthode renvoyant l'utilité totale du sac
     def getUtilite(self) -> int :
         return self.consommation.getUtilite() + self.alimentation.getUtilite() + self.transport.getUtilite() + self.logement.getUtilite()
     
+    #Question 4
     #Détermine si le sac est valide, i.e, son coût GES est inférieur à la borne passée en paramètre ou s'il est invalide
     def estValide(self, B_borne) -> bool :
         return self.getCoutGES() <= B_borne
@@ -46,7 +50,7 @@ class SacADosGES :
         if(isinstance(sac2, SacADosGES)) :
             return self.coutGES == sac2.coutGES and self.utilite == sac2.utilite
     
-    #estIdentique vérifie si deux sacs à dos sont exactement les mêmes
+    #estIdentique vérifie si deux sacs à dos sont exactement les mêmes - Remplace parfois la méthode __eq__ qui peut ne pas avoir le comportement attendu
     def estIdentique(self, sacADos2) :
         if(isinstance(sacADos2, SacADosGES)) :
             return self.alimentation == sacADos2.alimentation and self.consommation == sacADos2.consommation and self.logement == sacADos2.logement and self.transport == sacADos2.transport

@@ -1,6 +1,8 @@
 class ConsoGES :
     """ConsoGES est une classe qui représente un bien ou service produisant du Gaz à effet de serre (GES)"""
 
+    #La classe ConsoGES répond à la Question 1
+    
     #coutGES est un réel représentant le coût en GES de l'objet
     coutGES = 0.0
 

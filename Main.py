@@ -9,6 +9,9 @@ from itertools import product
 
 #Méthode exécutant le programme
 def main () -> None :
+
+    #Les listes ci-dessous répondent à la Question 2
+
     #Liste des postes d'alimentation possibles dans le programme
     alimentation = [ConsoGES(2.2, 5, "Alimentation très carnée"), 
                     ConsoGES(1.2, 7, "Alimentation modérément carnée"),
@@ -29,11 +32,17 @@ def main () -> None :
     consommation = [ConsoGES(2.5, 10, "Consommation importante de bien et services"), 
                     ConsoGES(1.3, 6, "Consommation sobre de bien et services")]
     
+    #_____________________________________________________
+
     #Question 5 - Ensemble des sacs à dos possibles
     listeSacsADos = getSacsADos(alimentation, transport,  logement,  consommation)
     
+    #_____________________________________________________
+
     #Question 9 affichage front de Pareto
     #afficherFrontDePareto(listeSacsADos)
+
+    #_____________________________________________________
 
     #TEST getSR_PD
     #print(getSR_PD(listeSacsADos).R_relationBinaire[0][0].__str__() + "\n" + getSR_PD(listeSacsADos).R_relationBinaire[0][1].__str__())
@@ -50,6 +59,8 @@ def main () -> None :
     #TEST filtre
     #nouvelle_listeSacsADos = filtre(0.0, listeSacsADos)
 
+    #_____________________________________________________
+
     #Initialisation du système relationnel de Pareto-dominance
     systemeRelationnel_PD = getSR_PD(listeSacsADos)
     #Initialisation du système relationnel lexicographique relatif aux coûts GES
@@ -58,6 +69,8 @@ def main () -> None :
     systemeRelationnel_LexU = getSR_LexU(listeSacsADos)
     #Initialisation du système relationnel borné
     systemeRelationnel_Borne = getSR_Borne(5.0, listeSacsADos)
+
+    #_____________________________________________________
 
     #Question 12 - Temps d'exécution : 6min30s - Affiche les propriétés des systèmes relationnels
 
@@ -73,6 +86,7 @@ def main () -> None :
     #getProprietesSR(systemeRelationnel_Borne)
     #print("_______________________________________")
 
+    #_____________________________________________________
 
     #Question 14
 
@@ -126,6 +140,8 @@ def main () -> None :
     plt.title("Distance entre le système relationnel borné et le système relationnel de Pareto-dominance")
     plt.show()
 
+    #_____________________________________________________
+    
     #Question 16 - Affiche l'utilité optimale des sacs à dos du système relationnel borné en faisant varier la borne
     #afficherUtiliteOptimale(listeSacsADos)
  
@@ -226,7 +242,7 @@ def getSR_LexU(listeSacsADos) -> SystemeRelationnel :
     return systemeRelationnelLexU
 
 #Question 10
-#getSR_LexU prend en entrée une liste de sacs à dos et renvoie un Système relationnel représentant la relation lexicographiqueC existant entre les divers sacs à dos
+#getSR_LexC prend en entrée une liste de sacs à dos et renvoie un Système relationnel représentant la relation lexicographiqueC existant entre les divers sacs à dos
 #Dans ce programme, la liste de sacs à dos est générée grâce à la méthode getSacsADos créée auparavant
 def getSR_LexC(listeSacsADos) -> SystemeRelationnel :
 
